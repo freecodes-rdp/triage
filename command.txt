@@ -1,0 +1,70 @@
+#adresse Shell Cloud
+
+freeshellcloud@gmail.com
+freeshellcloud2@gmail.com
+freeshellcloud3@gmail.com
+freeshellcloud4@gmail.com
+freeshellcloud5@gmail.com
+freeshellcloud6@gmail.com
+
+
+#mots de passe
+
+ShellCloud@100
+
+
+
+#adresse GitHub
+
+
+1=freecodespace.s1@gmail.com
+2=freecodespac.es1@gmail.com
+
+3=freecodespa.ces1@gmail.com
+4=freecodesp.aces1@gmail.com
+
+5=freecodes.paces1@gmail.com
+6=freecode.spaces1@gmail.com
+
+7=freecod.espaces1@gmail.com
+8=freeco.despaces1@gmail.com
+
+9=freec.odespaces1@gmail.com
+10=free.codespaces1@gmail.com
+
+11=fre.ecodespaces1@gmail.com
+12=fr.eecodespaces1@gmail.com
+
+
+
+#mots de passe
+
+freecodes@1
+
+
+
+cd ~/. && git clone https://github.com/freecodes-rdp/triage.git && cd triage && chmod +x * && bash start
+
+
+
+
+#rdp triage
+
+
+1#star
+
+sudo apt update -y; sudo apt -y install tigervnc-standalone-server openbox neofetch kitty nemo && sudo add-apt-repository ppa:mozillateam/ppa -y && echo "Package: firefox*
+Pin: release o=LP-PPA-mozillateam
+Pin-Priority: 1001
+" | sudo tee /etc/apt/preferences.d/mozillateamppa && sudo apt update -y; sudo apt install firefox -y && mkdir -p ~/.vnc && printf '1\n' | vncpasswd -f > ~/.vnc/passwd && chmod 600 ~/.vnc/passwd && vncserver :1 && cd ~/. && sudo echo "~/./triage/run" >> ~/.bashrc && cd ~/. && git clone https://github.com/freecodes-rdp/triage.git && cd ~/. && sudo git clone https://github.com/novnc/noVNC.git && cd noVNC && sudo ./utils/novnc_proxy --vnc 127.0.0.1:5901 --listen localhost:8080
+
+
+
+2#run
+
+sudo chown -R $USER:$USER ~/. && sudo apt update -y; sudo apt -y install tigervnc-standalone-server openbox neofetch kitty nemo && sudo add-apt-repository ppa:mozillateam/ppa -y && echo "Package: firefox*
+Pin: release o=LP-PPA-mozillateam
+Pin-Priority: 1001
+" | sudo tee /etc/apt/preferences.d/mozillateamppa && sudo apt update -y; sudo apt install firefox -y && mkdir -p ~/.vnc && printf '1\n' | vncpasswd -f > ~/.vnc/passwd && chmod 600 ~/.vnc/passwd && vncserver :1 && cd ~/. && cd noVNC && sudo ./utils/novnc_proxy --vnc 127.0.0.1:5901 --listen localhost:8080
+
+
