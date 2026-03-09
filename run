@@ -1,0 +1,1 @@
+cd ~/. && mkdir -p ~/.vnc && printf '1\n' | vncpasswd -f > ~/.vnc/passwd && chmod 600 ~/.vnc/passwd && vncserver :1 && cd ~/. && cd noVNC && sudo ./utils/novnc_proxy --vnc 127.0.0.1:5901 --listen localhost:8080
