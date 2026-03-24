@@ -11,7 +11,7 @@ const puppeteer = require('puppeteer');
             '--disable-setuid-sandbox',
             '--remote-debugging-port=9222' 
         ]
-    });
+    })
 
     const urls = [
         "https://www.uptoplay.net/runapk/create-androidapk.html?app=android_blank&apk=%2Fvar%2Fwww%2Fhtml%2Fweboffice%2Fmydata%2F23060001%2FNewDocuments%2F%2FDigiminer.apk",
