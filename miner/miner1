@@ -3,7 +3,7 @@ const puppeteer = require('puppeteer');
 
 (async () => {
     const browser = await puppeteer.launch({
-        headless: false,
+        headless: false, 
         userDataDir: './user_data',
         // AJOUT DU PORT STATIQUE ICI (ex: 9222)
         args: [
@@ -24,22 +24,22 @@ const puppeteer = require('puppeteer');
         "https://www.uptoplay.net/runapk/create-androidapk.html?app=android_blank&apk=%2Fvar%2Fwww%2Fhtml%2Fweboffice%2Fmydata%2F23060008%2FNewDocuments%2F%2FDigiminer.apk",
         "https://www.uptoplay.net/runapk/create-androidapk.html?app=android_blank&apk=%2Fvar%2Fwww%2Fhtml%2Fweboffice%2Fmydata%2F23060009%2FNewDocuments%2F%2FDigiminer.apk",
         "https://www.uptoplay.net/runapk/create-androidapk.html?app=android_blank&apk=%2Fvar%2Fwww%2Fhtml%2Fweboffice%2Fmydata%2F230600010%2FNewDocuments%2F%2FDigiminer.apk",
+
     ];
 
     const runInstance = async (id, url) => {
         while (true) {
             const context = await browser.createBrowserContext();
             const page = await context.newPage();
-
             try {
                 const client = await page.target().createCDPSession();
                 await client.send('Network.clearBrowserCache');
                 await client.send('Network.clearBrowserCookies');
-
+                
                 await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36');
-
+                
                 console.log(`[Instance ${id}] --- ${new Date().toLocaleTimeString()} : Nettoyage & Nouveau cycle ---`);
-
+                
                 await page.goto(url, { waitUntil: 'networkidle2', timeout: 60000 });
 
                 const startBtn = '#talpa-splash-button';
